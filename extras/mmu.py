@@ -259,6 +259,7 @@ class Mmu:
         self.default_tool_to_gate_map = list(config.getintlist('tool_to_gate_map', []))
         self.default_gate_status = list(config.getintlist('gate_status', []))
         self.default_gate_material = list(config.getlist('gate_material', []))
+        self.default_gate_spoolmanId = list(config.getlist('gate_spoolmanId', []))
         self.default_gate_color = list(config.getlist('gate_color', []))
 
         # Homing, loading and unloading controls for built-in logic
@@ -363,6 +364,15 @@ class Mmu:
             for i in range(self.mmu_num_gates):
                 self.default_gate_material.append("")
         self.gate_material = list(self.default_gate_material)
+
+        # Spoolman ids at each gate
+        if len(self.default_gate_spoolmanId) > 0:
+            if not len(self.default_gate_spoolmanId) == self.mmu_num_gates:
+                raise self.config.error("gate_material has different number of entries than the number of gates")
+        else:
+            for i in range(self.mmu_num_gates):
+                self.default_gate_spoolmanId.append("")
+        self.gate_spoolmanId = list(self.default_gate_spoolmanId)
 
         # Filmament color at each gate
         if len(self.default_gate_color) > 0:
@@ -4531,11 +4541,13 @@ class Mmu:
             # Specifying one gate (filament)
             gate = gcmd.get_int('GATE', minval=0, maxval=self.mmu_num_gates - 1)
             available = gcmd.get_int('AVAILABLE', self.gate_status[gate], minval=0, maxval=2)
+            spoolmanid = gcmd.get_int('SPOOLMANID', self.gate_status[gate], minval=0)
             material = "".join(gcmd.get('MATERIAL', self.gate_material[gate]).split()).replace('#', '').upper()[:10]
             color = "".join(gcmd.get('COLOR', self.gate_color[gate]).split()).replace('#', '').lower()
             if not self._validate_color(color):
                 raise gcmd.error("Color specification must be in form 'rrggbb' hexadecimal value (no '#') or valid color name or empty string")
             self.gate_material[gate] = material
+            self.gate_spoolmanId[gate]=spoolmanid
             self.gate_color[gate] = color
             self.gate_status[gate] = available
             self._persist_gate_map()
