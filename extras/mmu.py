@@ -136,6 +136,7 @@ class Mmu:
     VARS_MMU_TOOL_TO_GATE_MAP       = "mmu_state_tool_to_gate_map"
     VARS_MMU_GATE_STATUS            = "mmu_state_gate_status"
     VARS_MMU_GATE_MATERIAL          = "mmu_state_gate_material"
+    VARS_MMU_GATE_SPOOLMAN          = "mmu_state_spoolmanid"
     VARS_MMU_GATE_COLOR             = "mmu_state_gate_color"
     VARS_MMU_GATE_SELECTED          = "mmu_state_gate_selected"
     VARS_MMU_TOOL_SELECTED          = "mmu_state_tool_selected"
@@ -1018,6 +1019,7 @@ class Mmu:
     def _persist_gate_map(self):
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_MMU_GATE_STATUS, self.gate_status))
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_MMU_GATE_MATERIAL, list(map(lambda x: ("\'%s\'" %x), self.gate_material))))
+        self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_MMU_GATE_SPOOLMAN, list(map(lambda x: ("\'%s\'" %x), self.gate_spoolmanId))))
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_MMU_GATE_COLOR, list(map(lambda x: ("\'%s\'" %x), self.gate_color))))
 
     def _log_error(self, message):
