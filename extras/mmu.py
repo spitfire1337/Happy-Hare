@@ -4461,6 +4461,7 @@ class Mmu:
         self._log_debug("Resetting Gate/Filament map")
         self.gate_status = self.default_gate_status
         self.gate_material = self.default_gate_material
+        self.gate_spoolmanId = self.default_gate_spoolmanId
         self.gate_color = self.default_gate_color
         self._persist_gate_map()
 
