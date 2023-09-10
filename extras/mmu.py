@@ -4543,7 +4543,7 @@ class Mmu:
             # Specifying one gate (filament)
             gate = gcmd.get_int('GATE', minval=0, maxval=self.mmu_num_gates - 1)
             available = gcmd.get_int('AVAILABLE', self.gate_status[gate], minval=0, maxval=2)
-            spoolmanid = gcmd.get_int('SPOOLMANID', self.gate_status[gate], minval=0)
+            spoolmanid = gcmd.get_int('SPOOLMANID', self.gate_spoolmanId[gate], minval=0)
             material = "".join(gcmd.get('MATERIAL', self.gate_material[gate]).split()).replace('#', '').upper()[:10]
             color = "".join(gcmd.get('COLOR', self.gate_color[gate]).split()).replace('#', '').lower()
             if not self._validate_color(color):
