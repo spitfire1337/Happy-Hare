@@ -369,7 +369,7 @@ class Mmu:
         # Spoolman ids at each gate
         if len(self.default_gate_spoolmanId) > 0:
             if not len(self.default_gate_spoolmanId) == self.mmu_num_gates:
-                raise self.config.error("gate_material has different number of entries than the number of gates")
+                raise self.config.error("gate_spoolman has different number of entries than the number of gates")
         else:
             for i in range(self.mmu_num_gates):
                 self.default_gate_spoolmanId.append("")
@@ -744,6 +744,13 @@ class Mmu:
             gate_material = self.variables.get(self.VARS_MMU_GATE_MATERIAL, self.gate_material)
             if len(gate_status) == self.mmu_num_gates:
                 self.gate_material = gate_material
+            else:
+                errors.append("Incorrect number of gates specified in %s" % self.VARS_MMU_GATE_MATERIAL)
+
+            # Load spoolman id at each gate
+            gate_spoolman = self.variables.get(self.VARS_MMU_GATE_SPOOLMAN, self.gate_spoolmanId)
+            if len(gate_status) == self.mmu_num_gates:
+                self.gate_spoolmanId = gate_spoolman
             else:
                 errors.append("Incorrect number of gates specified in %s" % self.VARS_MMU_GATE_MATERIAL)
 
@@ -2262,6 +2269,7 @@ class Mmu:
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE='%s'" % (self.VARS_MMU_TOOL_TO_GATE_MAP, self.tool_to_gate_map))
         self.gate_status = list(self.default_gate_status)
         self.gate_material = list(self.default_gate_material)
+        self.gate_spoolmanId = list(self.default_gate_spoolmanId)
         self.gate_color = list(self.default_gate_color)
         self._persist_gate_map()
         self.gcode.run_script_from_command("SAVE_VARIABLE VARIABLE=%s VALUE=%d" % (self.VARS_MMU_GATE_SELECTED, self.gate_selected))
@@ -4414,6 +4422,7 @@ class Mmu:
         msg = "MMU Gates / Filaments:"
         for g in range(self.mmu_num_gates):
             material = self.gate_material[g] if self.gate_material[g] != "" else "n/a"
+            spoolman = self.gate_spoolmanId[g] if self.gate_spoolmanId[g] != "" else "n/a"
             color = self.gate_color[g] if self.gate_color[g] != "" else "n/a"
             available = {
                 self.GATE_AVAILABLE_FROM_BUFFER: "Buffered",
@@ -4433,7 +4442,7 @@ class Mmu:
                 msg += "?, " if prefix == "" else ", "
             else:
                 msg += ("\nGate #%d: " % g)
-            msg += ("Material: %s, Color: %s, Status: %s" % (material, color, available))
+            msg += ("Material: %s, Color: %s, SpoolmanID: %s, Status: %s" % (material, color, spoolman, available))
             if detail and g == self.gate_selected:
                 msg += " [SELECTED%s]" % ((" supporting tool T%d" % self.tool_selected) if self.tool_selected >= 0 else "")
         return msg
