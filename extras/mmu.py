@@ -190,9 +190,9 @@ class Mmu:
         self.printer.register_event_handler("klippy:ready", self.handle_ready)
     
         #Spool man integration
-        moonrakerConfig = configparser.ConfigParser(allow_no_value=True, strict=False)
-        moonrakerConfig.read(self.MOONRAKER_CONFIG)
-        if "spoolman" not in moonrakerConfig:
+        self.moonrakerConfig = configparser.ConfigParser(allow_no_value=True, strict=False)
+        self.moonrakerConfig.read(self.MOONRAKER_CONFIG)
+        if "spoolman" not in self.moonrakerConfig:
             self.mmu_spoolman = 0
         else:
             self.mmu_spoolman = 1
@@ -599,6 +599,7 @@ class Mmu:
     def handle_connect(self):
         self._setup_logging()
         self.toolhead = self.printer.lookup_object('toolhead')
+        self._log_info("Moonraker config: %s",self.moonrakerConfig)
         # See if we have a TMC controller capable of current control for filament collision detection and syncing
         # on gear_stepper and tip forming on extruder
         self.selector_tmc = self.gear_tmc = self.extruder_tmc = None
