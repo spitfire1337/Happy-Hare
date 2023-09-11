@@ -12,7 +12,7 @@
 #
 # This file may be distributed under the terms of the GNU GPLv3 license.
 #
-import logging, logging.handlers, threading, queue, time, contextlib
+import logging, logging.handlers, threading, queue, time, contextlib, json
 import math, os.path, re
 from random import randint
 import chelper
@@ -173,6 +173,7 @@ class Mmu:
     def __init__(self, config):
         self.config = config
         self.printer = config.get_printer()
+        self._log_info("Printer info:\n%s" % json.dumps(self.printer))
         self.reactor = self.printer.get_reactor()
         self.estimated_print_time = None
         self.last_selector_move_time = 0
