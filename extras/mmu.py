@@ -129,8 +129,6 @@ class Mmu:
     VENDOR_TRADRACK = "Tradrack" # In progress
     VENDOR_PRUSA    = "Prusa" # In progress
 
-    SPOOLMAN        = 0
-
     # mmu_vars.cfg variables
     VARS_MMU_CALIB_CLOG_LENGTH      = "mmu_calibration_clog_length"
     VARS_MMU_ENABLE_ENDLESS_SPOOL   = "mmu_state_enable_endless_spool"
@@ -189,7 +187,7 @@ class Mmu:
         self.printer.register_event_handler("klippy:ready", self.handle_ready)
     
         #Spool man integration
-        self.mmu_spoolman = config.get('spoolman', self.SPOOLMAN)
+        self.mmu_spoolman = config.getint('spoolman', 0, minval=0, maxval=1)
 
         # MMU hardware (steppers, servo, encoder and optional toolhead sensor)
         self.selector_stepper = self.gear_stepper = self.mmu_extruder_stepper = self.toolhead_sensor = self.encoder_sensor = self.servo = None
