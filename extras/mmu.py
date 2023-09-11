@@ -68,7 +68,7 @@ class MmuError(Exception):
 # Main klipper module
 class Mmu:
     home_folder = os.getenv('HOME')
-    MOONRAKER_CONFIG=home_folder + "/printer_data/config/moonraker.cfg"
+    MOONRAKER_CONFIG=home_folder + "/printer_data/config/moonraker.conf"
 
     BOOT_DELAY = 1.5            # Delay before running bootup tasks
 
