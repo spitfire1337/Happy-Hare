@@ -599,8 +599,9 @@ class Mmu:
 
     def handle_connect(self):
         self._setup_logging()
+        spoolmanAPI=self.gcode.run_script_from_command('action_call_remote_method("spoolman_set_active_spool",spool_id="")')
         self.toolhead = self.printer.lookup_object('toolhead')
-        self._log_info("Moonraker config: %s" % repr(self.moonrakerConfig))
+        self._log_info("Moonraker config: %s" % repr(spoolmanAPI))
         # See if we have a TMC controller capable of current control for filament collision detection and syncing
         # on gear_stepper and tip forming on extruder
         self.selector_tmc = self.gear_tmc = self.extruder_tmc = None
