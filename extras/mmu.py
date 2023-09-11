@@ -3706,7 +3706,7 @@ class Mmu:
                 raise MmuError("Error running user _MMU_POST_LOAD macro: %s" % str(e))
             
         if self.mmu_spoolman: 
-            self.gcode.run_script_from_command("action_call_remote_method('spoolman_set_active_spool',spool_id=%s)" % self.gate_spoolman[tool])
+            self.gcode.run_script_from_command("action_call_remote_method(\"spoolman_set_active_spool\",spool_id=%s)" % self.gate_spoolman[tool])
         self._restore_toolhead_position()
         self._restore_tool_override(self.tool_selected)
         self.gcode.run_script_from_command("M117 T%s" % tool)
