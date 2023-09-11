@@ -4227,7 +4227,7 @@ class Mmu:
         self.strict_filament_recovery = gcmd.get_int('STRICT_FILAMENT_RECOVERY', self.strict_filament_recovery, minval=0, maxval=1)
         self.retry_tool_change_on_error = gcmd.get_int('RETRY_TOOL_CHANGE_ON_ERROR', self.retry_tool_change_on_error, minval=0, maxval=1)
         self.pause_macro = gcmd.get('PAUSE_MACRO', self.pause_macro)
-
+        self.mmu_spoolman= gcmd.get_int('SPOOLMAN', self.mmu_spoolman, minval=0, maxval=1)
         # Calibration
         self.calibrated_bowden_length = gcmd.get_float('MMU_CALIBRATION_BOWDEN_LENGTH', self.calibrated_bowden_length, minval=10.)
         clog_length = gcmd.get_float('MMU_CALIBRATION_CLOG_LENGTH', self.encoder_sensor.get_clog_detection_length(), minval=1., maxval=100.)
@@ -4288,6 +4288,7 @@ class Mmu:
         msg += "\nlog_visual = %d" % self.log_visual
         msg += "\nlog_statistics = %d" % self.log_statistics
         msg += "\npause_macro = %s" % self.pause_macro
+        msg += "\nspoolman = %s" % self.mmu_spoolman
 
         msg += "\n\nCALIBRATION:"
         msg += "\nmmu_calibration_bowden_length = %.1f" % self.calibrated_bowden_length
