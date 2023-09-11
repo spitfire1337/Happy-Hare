@@ -891,7 +891,7 @@ class Mmu:
                 'tool': self.tool_selected,
                 'gate': self.gate_selected,
                 'material': self.gate_material[self.gate_selected] if self.gate_selected >= 0 else '',
-                'spoolman': self.gate_spoolman[self.gate_selected] if self.gate_selected >= 0 & self.mmu_spoolman==1 else '',
+                'spoolman': self.gate_spoolman[self.gate_selected] if self.gate_selected >= 0 & self.mmu_spoolman else '',
                 'next_tool': self._next_tool,
                 'last_tool': self._last_tool,
                 'last_toolchange': self._last_toolchange,
@@ -3705,8 +3705,6 @@ class Mmu:
             except Exception as e:
                 raise MmuError("Error running user _MMU_POST_LOAD macro: %s" % str(e))
             
-        if self.mmu_spoolman: 
-            self.gcode.run_script_from_command("action_call_remote_method('spoolman_set_active_spool',spool_id=%s)" % self.gate_spoolman[tool])
         self._restore_toolhead_position()
         self._restore_tool_override(self.tool_selected)
         self.gcode.run_script_from_command("M117 T%s" % tool)
