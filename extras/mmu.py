@@ -173,7 +173,7 @@ class Mmu:
     def __init__(self, config):
         self.config = config
         self.printer = config.get_printer()
-        self._log_info("Printer info:\n%s" % json.dumps(self.printer))
+        self._log_info("Printer info:\n%s" % repr(self.printer))
         self.reactor = self.printer.get_reactor()
         self.estimated_print_time = None
         self.last_selector_move_time = 0
