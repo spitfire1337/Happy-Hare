@@ -16,6 +16,7 @@ import logging, logging.handlers, threading, queue, time, contextlib, json
 import math, os.path, re
 from random import randint
 import chelper
+import configparser
 
 # Forward all messages through a queue (polled by background thread)
 class QueueHandler(logging.Handler):
@@ -66,6 +67,9 @@ class MmuError(Exception):
 
 # Main klipper module
 class Mmu:
+    home_folder = os.getenv('HOME')
+    MOONRAKER_CONFIG=home_folder + "/printer_data/config/moonraker.cfg"
+
     BOOT_DELAY = 1.5            # Delay before running bootup tasks
 
     LONG_MOVE_THRESHOLD = 70.   # This is also the initial move to load past encoder
@@ -186,7 +190,12 @@ class Mmu:
         self.printer.register_event_handler("klippy:ready", self.handle_ready)
     
         #Spool man integration
-        self.mmu_spoolman = 0
+        moonrakerConfig = configparser.ConfigParser(allow_no_value=True, strict=False)
+        moonrakerConfig.read(self.MOONRAKER_CONFIG)
+        if "spoolman" not in moonrakerConfig:
+            self.mmu_spoolman = 0
+        else:
+            self.mmu_spoolman = 1
 
         # MMU hardware (steppers, servo, encoder and optional toolhead sensor)
         self.selector_stepper = self.gear_stepper = self.mmu_extruder_stepper = self.toolhead_sensor = self.encoder_sensor = self.servo = None
@@ -4224,7 +4233,6 @@ class Mmu:
         self.strict_filament_recovery = gcmd.get_int('STRICT_FILAMENT_RECOVERY', self.strict_filament_recovery, minval=0, maxval=1)
         self.retry_tool_change_on_error = gcmd.get_int('RETRY_TOOL_CHANGE_ON_ERROR', self.retry_tool_change_on_error, minval=0, maxval=1)
         self.pause_macro = gcmd.get('PAUSE_MACRO', self.pause_macro)
-        self.mmu_spoolman= gcmd.get_int('SPOOLMAN', self.mmu_spoolman, minval=0, maxval=1)
         # Calibration
         self.calibrated_bowden_length = gcmd.get_float('MMU_CALIBRATION_BOWDEN_LENGTH', self.calibrated_bowden_length, minval=10.)
         clog_length = gcmd.get_float('MMU_CALIBRATION_CLOG_LENGTH', self.encoder_sensor.get_clog_detection_length(), minval=1., maxval=100.)
@@ -4285,7 +4293,6 @@ class Mmu:
         msg += "\nlog_visual = %d" % self.log_visual
         msg += "\nlog_statistics = %d" % self.log_statistics
         msg += "\npause_macro = %s" % self.pause_macro
-        msg += "\nspoolman = %s" % self.mmu_spoolman
 
         msg += "\n\nCALIBRATION:"
         msg += "\nmmu_calibration_bowden_length = %.1f" % self.calibrated_bowden_length
