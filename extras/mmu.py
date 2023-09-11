@@ -891,7 +891,7 @@ class Mmu:
                 'tool': self.tool_selected,
                 'gate': self.gate_selected,
                 'material': self.gate_material[self.gate_selected] if self.gate_selected >= 0 else '',
-                'spoolmanId': self.gate_spoolman[self.gate_selected] if self.gate_selected >= 0 & self.mmu_spoolman==1 else '',
+                'spoolman': self.gate_spoolman[self.gate_selected] if self.gate_selected >= 0 & self.mmu_spoolman==1 else '',
                 'next_tool': self._next_tool,
                 'last_tool': self._last_tool,
                 'last_toolchange': self._last_toolchange,
