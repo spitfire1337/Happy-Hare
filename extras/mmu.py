@@ -192,7 +192,7 @@ class Mmu:
         #Spool man integration
         self.moonrakerConfig = configparser.ConfigParser(allow_no_value=True, strict=False)
         self.moonrakerConfig.read(self.MOONRAKER_CONFIG)
-        #self.moonrakerConfig.sections()
+        self.moonrakerConfig.sections()
         if "spoolman" not in self.moonrakerConfig:
             self.mmu_spoolman = 0
         else:
@@ -600,7 +600,7 @@ class Mmu:
     def handle_connect(self):
         self._setup_logging()
         self.toolhead = self.printer.lookup_object('toolhead')
-        
+        self._log_info("Moonraker config: %s" % repr(self.moonrakerConfig)
         # See if we have a TMC controller capable of current control for filament collision detection and syncing
         # on gear_stepper and tip forming on extruder
         self.selector_tmc = self.gear_tmc = self.extruder_tmc = None
@@ -827,11 +827,6 @@ class Mmu:
         self.printer.register_event_handler("idle_timeout:printing", self._handle_idle_timeout_printing)
         self.printer.register_event_handler("idle_timeout:ready", self._handle_idle_timeout_ready)
         self.printer.register_event_handler("idle_timeout:idle", self._handle_idle_timeout_idle)
-
-        spoolmanAPI=self.gcode.run_script_from_command('action_call_remote_method("spoolman_set_active_spool",spool_id="")')
-        self._log_info("Moonraker config: %s" % repr(spoolmanAPI))
-
-
         self._setup_heater_off_reactor()
         self.saved_toolhead_position = False
 
