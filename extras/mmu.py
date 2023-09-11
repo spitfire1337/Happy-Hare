@@ -173,7 +173,7 @@ class Mmu:
     def __init__(self, config):
         self.config = config
         self.printer = config.get_printer()
-        
+        self.server = config.get_server()
         self.reactor = self.printer.get_reactor()
         self.estimated_print_time = None
         self.last_selector_move_time = 0
@@ -187,7 +187,7 @@ class Mmu:
         self.printer.register_event_handler("klippy:ready", self.handle_ready)
     
         #Spool man integration
-        self.mmu_spoolman = config.getint('spoolman', 0, minval=0, maxval=1)
+        self.mmu_spoolman = self.server.lookup_component('spoolman')
 
         # MMU hardware (steppers, servo, encoder and optional toolhead sensor)
         self.selector_stepper = self.gear_stepper = self.mmu_extruder_stepper = self.toolhead_sensor = self.encoder_sensor = self.servo = None
