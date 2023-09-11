@@ -600,8 +600,8 @@ class Mmu:
     def handle_connect(self):
         self._setup_logging()
         self.toolhead = self.printer.lookup_object('toolhead')
-
-        self._log_info("Moonraker config: %s" % repr(help(self.moonrakerConfig)))
+        for el in self.moonrakerConfig:
+            self._log_info("Moonraker config item: %s" % repr(el))
         # See if we have a TMC controller capable of current control for filament collision detection and syncing
         # on gear_stepper and tip forming on extruder
         self.selector_tmc = self.gear_tmc = self.extruder_tmc = None
